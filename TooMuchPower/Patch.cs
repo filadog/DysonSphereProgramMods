@@ -7,15 +7,20 @@ namespace TooMuchPower
         [HarmonyPostfix, HarmonyPatch(typeof(UIDysonPanel), "_OnUpdate")]
         static void OnUpdatePatched(UIDysonPanel __instance)
         {
-            __instance.genEnergyText.text = GeneratePowerValue(__instance.viewDysonSphere.energyGenCurrentTick * 60, TargetValue.MW);
+            string text = GeneratePowerValue(__instance.viewDysonSphere.energyGenCurrentTick * 60, TargetValue.MW);
+            if (text.Length > 8)
+            {
+                __instance.genEnergyText.fontSize = 35;
+            }
+            __instance.genEnergyText.text = text;
         }
 
         private static string GeneratePowerValue(long totalEnergyGen, TargetValue targetValue)
         {
-            // Remove trailing numbers according to the target power display value
+            // Remove trailing numbers according to the target value
             string value = totalEnergyGen.ToString();
             int length = value.Length;
-            string sign = "W";
+            string sign = " W";
             if (totalEnergyGen != 0)
             {
                 if (targetValue >= TargetValue.kW && length > 3)
