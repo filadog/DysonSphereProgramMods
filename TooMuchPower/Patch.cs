@@ -43,8 +43,8 @@ namespace TooMuchPower
                     sign = " PW";
                     length -= 3;
                 }
+                value = value.Remove(length);
             }
-            value = value.Remove(length);
             value += sign;
             return value;
         }
