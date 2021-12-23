@@ -4,6 +4,8 @@ namespace TooMuchPower
 {
     public class Patch
     {
+        private static string[] signs = new string[] { " kW", " MW", " GW", " TW", " PW" };
+
         [HarmonyPostfix, HarmonyPatch(typeof(UIDysonPanel), "_OnUpdate")]
         static void OnUpdatePatched(UIDysonPanel __instance)
         {
@@ -23,30 +25,13 @@ namespace TooMuchPower
             string sign = " W";
             if (totalEnergyGen != 0)
             {
-                if (targetValue >= TargetValue.kW && length > 3)
+                for (int i = 0; i <= (int)targetValue; i++)
                 {
-                    sign = " kW";
-                    length -= 3;
-                }
-                if (targetValue >= TargetValue.MW && length > 3)
-                {
-                    sign = " MW";
-                    length -= 3;
-                }
-                if (targetValue >= TargetValue.GW && length > 3)
-                {
-                    sign = " GW";
-                    length -= 3;
-                }
-                if (targetValue >= TargetValue.TW && length > 3)
-                {
-                    sign = " TW";
-                    length -= 3;
-                }
-                if (targetValue >= TargetValue.PW && length > 3)
-                {
-                    sign = " PW";
-                    length -= 3;
+                    if (length > 3)
+                    {
+                        sign = signs[i];
+                        length -= 3;
+                    }
                 }
                 value = value.Remove(length);
             }
@@ -56,11 +41,11 @@ namespace TooMuchPower
 
         enum TargetValue
         {
-            kW = 3,
-            MW = 6,
-            GW = 9,
-            TW = 12,
-            PW = 15
+            kW,
+            MW,
+            GW,
+            TW,
+            PW
         }
     }
 }
